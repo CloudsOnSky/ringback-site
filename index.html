@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RingBack — Stop losing patients to missed calls</title>
+<meta name="description" content="RingBack texts your missed callers back in seconds — as your dental practice — and books them before they reach a competitor." />
+<style>
+  :root{
+    --ink:#0f2a2e; --muted:#52646a; --line:#e3e9e8;
+    --teal:#0d9488; --teal-dark:#0b7a70; --teal-soft:#e7f5f2;
+    --bg:#ffffff; --bg-soft:#f6faf9; --amber:#b45309;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+  a{color:inherit;text-decoration:none}
+  .btn{display:inline-block;background:var(--teal);color:#fff;font-weight:600;padding:14px 26px;border-radius:10px;transition:background .15s;border:none;cursor:pointer;font-size:16px}
+  .btn:hover{background:var(--teal-dark)}
+  .btn-ghost{background:transparent;color:var(--teal);border:1.5px solid var(--teal)}
+  .btn-ghost:hover{background:var(--teal-soft)}
+
+  header{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);z-index:10}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{font-weight:800;font-size:21px;letter-spacing:-.02em}
+  .logo span{color:var(--teal)}
+  .nav .btn{padding:10px 18px;font-size:15px}
+
+  .hero{padding:84px 0 72px;background:linear-gradient(180deg,var(--bg-soft),#fff)}
+  .eyebrow{display:inline-block;background:var(--teal-soft);color:var(--teal-dark);font-weight:600;font-size:13px;padding:6px 14px;border-radius:999px;letter-spacing:.03em;text-transform:uppercase}
+  .hero h1{font-size:46px;line-height:1.1;letter-spacing:-.025em;margin:22px 0 18px;max-width:18ch;font-weight:800}
+  .hero p.lead{font-size:20px;color:var(--muted);max-width:54ch;margin-bottom:32px}
+  .hero .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .hero .note{color:var(--muted);font-size:14px;margin-top:18px}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:56px 0;border-bottom:1px solid var(--line)}
+  .stat{background:var(--bg-soft);border:1px solid var(--line);border-radius:14px;padding:28px 24px}
+  .stat .num{font-size:38px;font-weight:800;color:var(--teal);letter-spacing:-.02em}
+  .stat .lbl{color:var(--muted);margin-top:8px;font-size:15px}
+
+  section.block{padding:76px 0}
+  .kicker{color:var(--teal);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+  h2{font-size:32px;letter-spacing:-.02em;margin:10px 0 14px;font-weight:800}
+  .sub{color:var(--muted);font-size:18px;max-width:56ch}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px}
+  .step{border:1px solid var(--line);border-radius:14px;padding:28px;background:#fff}
+  .step .n{width:38px;height:38px;border-radius:10px;background:var(--teal-soft);color:var(--teal-dark);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .step h3{font-size:19px;margin:18px 0 8px}
+  .step p{color:var(--muted);font-size:15px}
+
+  .why{background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+  .feat h3{font-size:18px;margin-bottom:6px;display:flex;align-items:center;gap:9px}
+  .feat h3::before{content:"";width:9px;height:9px;border-radius:3px;background:var(--teal)}
+  .feat p{color:var(--muted);font-size:15px}
+
+  .price{text-align:center}
+  .price-card{max-width:460px;margin:40px auto 0;border:1.5px solid var(--teal);border-radius:18px;padding:40px 32px;background:#fff}
+  .price-card .amt{font-size:50px;font-weight:800;letter-spacing:-.03em}
+  .price-card .amt small{font-size:18px;color:var(--muted);font-weight:600}
+  .price-card ul{list-style:none;margin:22px 0 28px;text-align:left;display:inline-block}
+  .price-card li{padding:7px 0 7px 28px;position:relative;color:var(--ink)}
+  .price-card li::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+  .trial{color:var(--amber);font-weight:600;margin-top:14px}
+
+  footer{background:#0f2a2e;color:#cfe0dd;padding:54px 0}
+  footer .ft{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;align-items:center}
+  footer .logo{color:#fff}
+  footer a.mail{color:#7fe0d2;font-weight:600}
+  footer .fine{color:#8aa19d;font-size:13px;margin-top:18px;max-width:60ch}
+
+  @media(max-width:760px){
+    .hero h1{font-size:34px}
+    .hero p.lead{font-size:18px}
+    .stats,.steps,.why-grid{grid-template-columns:1fr}
+    h2{font-size:26px}
+    .nav .btn{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">Ring<span>Back</span></div>
+    <a class="btn" href="mailto:ben@ringbackdental.com?subject=RingBack%20demo">Book a demo</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">For US dental practices</span>
+    <h1>Every missed call is a patient walking into another office.</h1>
+    <p class="lead">RingBack texts your missed callers back within seconds — as your practice — finds out what they need, and hands a ready-to-book patient to your front desk before they reach a competitor.</p>
+    <div class="cta-row">
+      <a class="btn" href="mailto:ben@ringbackdental.com?subject=RingBack%20demo">Book a 10-min demo</a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
+    </div>
+    <p class="note">Free for the first two weeks · live in a day · no access to your records</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><div class="num">~30%</div><div class="lbl">of calls to a busy practice go unanswered</div></div>
+    <div class="stat"><div class="num">86%</div><div class="lbl">of those callers never leave a voicemail — they just call the next office</div></div>
+    <div class="stat"><div class="num">~$6,700</div><div class="lbl">the lifetime value of a single new patient</div></div>
+  </div>
+</div>
+
+<section class="block" id="how">
+  <div class="wrap">
+    <div class="kicker">How it works</div>
+    <h2>Three steps. Nothing for your team to learn.</h2>
+    <p class="sub">You forward only your unanswered calls. RingBack does the rest.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <h3>A call goes unanswered</h3>
+        <p>You forward just your missed calls to a number we give you — a two-minute setting your phone provider already has. No apps, no new hardware.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h3>RingBack texts them back instantly</h3>
+        <p>As your practice, it asks who they are and what they need — warm, natural, and honest that it's your assistant if anyone asks.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h3>Your front desk gets a ready lead</h3>
+        <p>Name, reason for the visit, and preferred times — captured and handed straight to your team to confirm. You stay in control of the calendar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block why">
+  <div class="wrap">
+    <div class="kicker">Why practices use it</div>
+    <h2>Recover the patients voicemail quietly loses.</h2>
+    <div class="why-grid">
+      <div class="feat">
+        <h3>More booked chairs</h3>
+        <p>Catch the new patients who would have dialed the next office — without hiring or staying late.</p>
+      </div>
+      <div class="feat">
+        <h3>Live in a day</h3>
+        <p>Call-forwarding only. No access to your records or scheduling system, no IT project, no disruption.</p>
+      </div>
+      <div class="feat">
+        <h3>Sounds like you</h3>
+        <p>On-brand, human texts under your practice's name. It captures and hands off — it never books over your team.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block price">
+  <div class="wrap">
+    <div class="kicker">Simple pricing</div>
+    <h2>One recovered patient pays for it many times over.</h2>
+    <div class="price-card">
+      <div class="amt">$199<small>/month</small></div>
+      <ul>
+        <li>Unlimited missed-call text-backs</li>
+        <li>Leads handed to your front desk</li>
+        <li>Setup in one short call</li>
+        <li>No contract — cancel anytime</li>
+      </ul>
+      <div><a class="btn" href="mailto:ben@ringbackdental.com?subject=RingBack%20free%20trial">Start your free 2-week trial</a></div>
+      <p class="trial">Free for the first two weeks — see it catch patients before you pay.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="ft">
+      <div class="logo">Ring<span style="color:#7fe0d2">Back</span></div>
+      <div>Questions? <a class="mail" href="mailto:ben@ringbackdental.com">ben@ringbackdental.com</a></div>
+    </div>
+    <p class="fine">RingBack helps US dental practices recover new patients lost to unanswered calls. RingBack captures caller details and hands them to your front desk; it does not access your patient records or scheduling system.</p>
+  </div>
+</footer>
+
+</body>
+</html>
