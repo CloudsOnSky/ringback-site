@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>RingBack — Stop losing patients to missed calls</title>
 <meta name="description" content="RingBack texts your missed callers back in seconds — as your dental practice — and books them before they reach a competitor." />
+<link rel="canonical" href="https://ringbackdental.com/" />
+<!-- Link-preview card (RingBack's cold emails link here — this is what shows when the link is shared) -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="RingBack" />
+<meta property="og:title" content="Stop losing patients to missed calls" />
+<meta property="og:description" content="RingBack texts your missed callers back within seconds — as your practice — and hands a ready-to-book patient to your front desk." />
+<meta property="og:url" content="https://ringbackdental.com/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="RingBack — Stop losing patients to missed calls" />
+<meta name="twitter:description" content="Texts your missed callers back in seconds, as your practice, and books them before a competitor does." />
+<!-- Inline teal favicon (no extra file needed) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d9488'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='Arial'%3ER%3C/text%3E%3C/svg%3E" />
 <style>
   :root{
     --ink:#0f2a2e; --muted:#52646a; --line:#e3e9e8;
@@ -65,6 +77,16 @@
   .price-card li::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
   .trial{color:var(--amber);font-weight:600;margin-top:14px}
 
+  .faq{background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .faq-list{margin-top:36px;max-width:760px}
+  .faq details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:0;margin-bottom:12px;overflow:hidden}
+  .faq summary{list-style:none;cursor:pointer;padding:18px 22px;font-weight:700;font-size:16.5px;
+    display:flex;justify-content:space-between;align-items:center;gap:16px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";color:var(--teal);font-weight:800;font-size:22px;transition:transform .2s}
+  .faq details[open] summary::after{content:"–"}
+  .faq details p{padding:0 22px 20px;color:var(--muted);font-size:15px;margin:0}
+
   footer{background:#0f2a2e;color:#cfe0dd;padding:54px 0}
   footer .ft{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;align-items:center}
   footer .logo{color:#fff}
@@ -95,7 +117,7 @@
     <h1>Every missed call is a patient walking into another office.</h1>
     <p class="lead">RingBack texts your missed callers back within seconds — as your practice — finds out what they need, and hands a ready-to-book patient to your front desk before they reach a competitor.</p>
     <div class="cta-row">
-      <a class="btn" href="mailto:ben@ringbackdental.com?subject=RingBack%20demo">Book a 10-min demo</a>
+      <a class="btn" href="demo.html">▶ See it rescue a patient (live)</a>
       <a class="btn btn-ghost" href="#how">See how it works</a>
     </div>
     <p class="note">Free for the first two weeks · live in a day · no access to your records</p>
@@ -104,10 +126,11 @@
 
 <div class="wrap">
   <div class="stats">
-    <div class="stat"><div class="num">~30%</div><div class="lbl">of calls to a busy practice go unanswered</div></div>
-    <div class="stat"><div class="num">86%</div><div class="lbl">of those callers never leave a voicemail — they just call the next office</div></div>
-    <div class="stat"><div class="num">~$6,700</div><div class="lbl">the lifetime value of a single new patient</div></div>
+    <div class="stat"><div class="num">~1 in 3</div><div class="lbl">calls to a busy practice go unanswered at peak times</div></div>
+    <div class="stat"><div class="num">most</div><div class="lbl">callers who hit voicemail don't leave one — they just call the next office</div></div>
+    <div class="stat"><div class="num">$1,000s</div><div class="lbl">in lifetime value walks out the door with each new patient you miss</div></div>
   </div>
+  <p style="text-align:center;color:var(--muted);font-size:13px;margin:-32px 0 8px">Industry estimates — the exact numbers vary by practice, but the leak is real.</p>
 </div>
 
 <section class="block" id="how">
@@ -152,6 +175,39 @@
         <h3>Sounds like you</h3>
         <p>On-brand, human texts under your practice's name. It captures and hands off — it never books over your team.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="block faq" id="faq">
+  <div class="wrap">
+    <div class="kicker">Questions practices ask</div>
+    <h2>The honest answers.</h2>
+    <div class="faq-list">
+      <details>
+        <summary>Do you touch our patient records or scheduling system?</summary>
+        <p>No. RingBack only sees the text conversation with the person who just called you. It has no access to your PMS, your calendar, or any patient files — it captures a caller's name, reason, and preferred times, then hands that to your front desk. Your team books the actual slot.</p>
+      </details>
+      <details>
+        <summary>What if the caller asks whether they're texting a real person?</summary>
+        <p>It tells the truth — that it's the practice's text assistant and a team member will follow up to confirm. It never pretends to be a specific named staff member. Honest by design, so it protects your reputation instead of risking it.</p>
+      </details>
+      <details>
+        <summary>What happens with a dental emergency?</summary>
+        <p>Severe pain, swelling, or trauma are flagged as urgent immediately. RingBack doesn't make an emergency caller shop for appointment times — it reassures them, tells them a team member will call right back, points to 911 if it's serious, and pushes that lead to the top for your front desk.</p>
+      </details>
+      <details>
+        <summary>How hard is setup, and what do we need?</summary>
+        <p>One short call. You forward only your <em>unanswered</em> calls to a number we give you — a setting your phone provider already has. No apps, no new hardware, no IT project. Most practices are live the same day.</p>
+      </details>
+      <details>
+        <summary>Will it book appointments over our team's heads?</summary>
+        <p>Never. RingBack <em>captures and hands off</em> — it collects what the patient needs and gives it to your front desk. Your team stays in full control of the calendar and confirms every appointment.</p>
+      </details>
+      <details>
+        <summary>What does it cost to try?</summary>
+        <p>Free for the first two weeks, no card required. If it hasn't caught you patients you'd otherwise have lost, you walk away — and it's month-to-month after that, cancel anytime.</p>
+      </details>
     </div>
   </div>
 </section>

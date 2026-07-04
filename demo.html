@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RingBack — See It Rescue a Patient (Live)</title>
+<meta name="description" content="Watch RingBack text a missed caller back and book them — then try it yourself against the real AI.">
+<meta property="og:type" content="website" />
+<meta property="og:title" content="See RingBack rescue a patient — live" />
+<meta property="og:description" content="Watch the missed-call text-back in action, then try it yourself against the real AI receptionist." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d9488'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='Arial'%3ER%3C/text%3E%3C/svg%3E" />
+<style>
+  :root{
+    --ink:#0f2a2e; --muted:#52646a; --line:#e3e9e8;
+    --teal:#0d9488; --teal-dark:#0b7a70; --teal-soft:#e7f5f2;
+    --bg:#ffffff; --bg-soft:#f6faf9; --amber:#b45309; --green:#0d9c5b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(180deg,var(--bg-soft),#fff);color:var(--ink);min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;padding:40px 16px 56px;-webkit-font-smoothing:antialiased}
+  a{color:var(--teal);text-decoration:none;font-weight:600}
+  .logo{font-weight:800;font-size:22px;letter-spacing:-.02em;margin-bottom:22px}
+  .logo span{color:var(--teal)}
+  h1{font-size:27px;font-weight:800;letter-spacing:-.02em;text-align:center;max-width:20ch;line-height:1.18}
+  .sub{font-size:15px;color:var(--muted);margin:10px 0 26px;text-align:center;max-width:46ch}
+
+  .scene{display:flex;flex-direction:column;align-items:center;gap:22px}
+
+  /* timeline */
+  .timeline{display:flex;gap:0;width:100%;max-width:360px}
+  .tstep{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
+  .tstep:not(:last-child)::after{content:'';position:absolute;top:14px;left:50%;width:100%;height:2px;background:var(--line);z-index:0}
+  .tstep:not(:last-child).done::after{background:var(--teal)}
+  .tdot{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);background:#fff;display:flex;
+    align-items:center;justify-content:center;z-index:1;transition:all .3s;font-size:14px}
+  .tdot.done{background:var(--teal);border-color:var(--teal);color:#fff}
+  .tdot.active{border-color:var(--teal);color:var(--teal);animation:tp 1.1s infinite}
+  @keyframes tp{0%,100%{box-shadow:0 0 0 0 rgba(13,148,136,.28)}50%{box-shadow:0 0 0 7px rgba(13,148,136,0)}}
+  .tlbl{font-size:10.5px;color:var(--muted);text-align:center;line-height:1.25;font-weight:600}
+
+  /* phone */
+  .phone{width:270px;height:552px;background:#0b0f14;border-radius:42px;border:2px solid #d7e2df;
+    position:relative;overflow:hidden;box-shadow:0 24px 60px -20px rgba(15,42,46,.4)}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:96px;height:24px;background:#0b0f14;border-radius:0 0 16px 16px;z-index:30}
+  .status-bar{position:absolute;top:0;left:0;right:0;height:42px;display:flex;align-items:flex-end;
+    justify-content:space-between;padding:0 20px 7px;font-size:11px;font-weight:600;z-index:20;color:#fff}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;opacity:0;transition:opacity .4s;pointer-events:none}
+  .screen.active{opacity:1;pointer-events:all}
+
+  /* S1 incoming call */
+  .s1{background:linear-gradient(165deg,#0f2a2e,#0b3b38)}
+  .caller-name{color:#fff;font-size:23px;font-weight:700;margin-top:66px;text-align:center}
+  .caller-sub{color:rgba(255,255,255,.5);font-size:12px;margin-top:6px}
+  .call-ring{width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;
+    align-items:center;justify-content:center;margin:26px 0 8px;font-size:34px;animation:pulse 1.2s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.16)}50%{box-shadow:0 0 0 20px rgba(255,255,255,0)}}
+  .clinic-tag{color:rgba(255,255,255,.35);font-size:11px}
+  .btns-call{display:flex;gap:36px;margin-top:34px}
+  .btn-circle{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:23px}
+  .btn-decline{background:#e5484d}.btn-answer{background:#2ecc71}
+  .busy-hint{color:rgba(255,255,255,.25);font-size:10.5px;margin-top:38px}
+
+  /* S2 missed */
+  .s2{background:#0b0f14;justify-content:flex-start}
+  .missed-header{width:100%;background:#141a20;padding:14px 16px;display:flex;align-items:center;gap:10px;margin-top:42px}
+  .missed-icon{width:38px;height:38px;border-radius:50%;background:rgba(229,72,77,.16);display:flex;align-items:center;justify-content:center;font-size:17px}
+  .missed-text p{color:#fff;font-size:13px;font-weight:600}
+  .missed-text span{color:#7a8894;font-size:11px}
+  .missed-notif{width:calc(100% - 24px);background:#141a20;border-radius:13px;padding:13px 14px;margin-top:10px;border:.5px solid #222b33}
+  .notif-app{font-size:11px;color:var(--teal);margin-bottom:3px;font-weight:600}
+  .notif-title{font-size:13px;color:#fff;font-weight:600}
+  .notif-body{font-size:12px;color:#9aa7b1;margin-top:2px}
+
+  /* S3 SMS thread */
+  .s3{background:#0b0f14;flex-direction:column;justify-content:flex-start}
+  .sms-topbar{width:100%;background:#141a20;padding:42px 14px 10px;display:flex;align-items:center;gap:9px;border-bottom:.5px solid #222b33;z-index:5}
+  .sms-avatar{width:34px;height:34px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700;flex-shrink:0}
+  .sms-name{font-size:14px;color:#fff;font-weight:600}
+  .sms-sub{font-size:11px;color:#7a8894}
+  .sms-messages{flex:1;overflow-y:auto;padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px;width:100%}
+  .sms-messages::-webkit-scrollbar{width:0}
+  .bubble{max-width:82%;padding:8px 12px;border-radius:17px;font-size:12.5px;line-height:1.45;
+    opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s;word-wrap:break-word}
+  .bubble.shown{opacity:1;transform:translateY(0)}
+  .bubble.them{background:#232b33;color:#eef2f4;align-self:flex-start;border-bottom-left-radius:5px}
+  .bubble.us{background:var(--teal);color:#fff;align-self:flex-end;border-bottom-right-radius:5px}
+  .typing{display:flex;gap:4px;align-items:center;padding:11px 14px;background:#232b33;border-radius:16px;border-bottom-left-radius:5px;align-self:flex-start;opacity:0;transition:opacity .3s}
+  .typing.shown{opacity:1}
+  .tdotd{width:6px;height:6px;border-radius:50%;background:#8b98a2;animation:blink 1s infinite}
+  .tdotd:nth-child(2){animation-delay:.2s}.tdotd:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
+
+  .captured-banner{width:calc(100% - 20px);background:rgba(13,156,91,.12);border:.5px solid rgba(13,156,91,.5);
+    border-radius:11px;padding:10px 13px;margin:2px 10px 4px;opacity:0;max-height:0;overflow:hidden;transition:opacity .4s,max-height .4s}
+  .captured-banner.shown{opacity:1;max-height:220px}
+  .captured-banner .bt{font-size:11.5px;color:#37d98a;font-weight:700;margin-bottom:5px}
+  .cap-row{font-size:11px;color:#c7d2cd;display:flex;gap:6px;margin-top:2px}
+  .cap-row b{color:#fff;font-weight:600;min-width:64px}
+
+  /* SMS input bar (live mode) */
+  .sms-input{display:none;width:100%;padding:9px 10px 12px;background:#141a20;border-top:.5px solid #222b33;gap:8px;align-items:center;z-index:5}
+  .sms-input.on{display:flex}
+  .sms-input input{flex:1;background:#232b33;border:none;border-radius:18px;padding:9px 14px;color:#fff;font-size:12.5px;outline:none}
+  .sms-input input::placeholder{color:#7a8894}
+  .sms-input button{width:34px;height:34px;border-radius:50%;border:none;background:var(--teal);color:#fff;font-size:15px;cursor:pointer;flex-shrink:0}
+  .sms-input button:disabled{opacity:.45;cursor:default}
+
+  /* controls */
+  .ctrl-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .ctrl-btn{padding:11px 22px;border-radius:10px;border:1.5px solid var(--line);background:#fff;color:var(--ink);
+    font-size:14px;font-weight:600;cursor:pointer;transition:all .15s}
+  .ctrl-btn:hover{border-color:var(--teal);color:var(--teal-dark)}
+  .ctrl-btn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+  .ctrl-btn.primary:hover{background:var(--teal-dark);color:#fff}
+  .ctrl-btn:disabled{opacity:.45;cursor:default}
+  .mode-hint{font-size:12.5px;color:var(--muted);text-align:center;min-height:18px;max-width:40ch}
+  .foot{margin-top:30px;font-size:14px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+
+<div class="logo">Ring<span>Back</span></div>
+<h1>Watch a missed call become a booked patient</h1>
+<p class="sub">See the auto text-back in action — then <b>try it live yourself</b> against the real AI receptionist.</p>
+
+<div class="scene">
+  <div class="timeline" id="timeline">
+    <div class="tstep" id="ts0"><div class="tdot active" id="dot0">📞</div><span class="tlbl">Incoming<br>call</span></div>
+    <div class="tstep" id="ts1"><div class="tdot" id="dot1">📵</div><span class="tlbl">Missed</span></div>
+    <div class="tstep" id="ts2"><div class="tdot" id="dot2">💬</div><span class="tlbl">Auto<br>text-back</span></div>
+    <div class="tstep" id="ts3"><div class="tdot" id="dot3">✅</div><span class="tlbl">Lead<br>captured</span></div>
+  </div>
+
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar"><span>9:41</span><span>5G ▮▮▮</span></div>
+
+    <div class="screen s1 active" id="s1">
+      <div class="caller-name">+1 (512) 448-2190</div>
+      <div class="caller-sub">New patient calling…</div>
+      <div class="call-ring">📲</div>
+      <div class="clinic-tag">Bright Smile Dental</div>
+      <div class="btns-call"><div class="btn-circle btn-decline">📵</div><div class="btn-circle btn-answer">📞</div></div>
+      <div class="busy-hint">front desk is busy…</div>
+    </div>
+
+    <div class="screen s2" id="s2">
+      <div class="missed-header">
+        <div class="missed-icon">📵</div>
+        <div class="missed-text"><p>Missed call</p><span>+1 (512) 448-2190 · just now</span></div>
+      </div>
+      <div class="missed-notif">
+        <div class="notif-app">RingBack · now</div>
+        <div class="notif-title">Missed call rescued</div>
+        <div class="notif-body">Texting the patient back as Bright Smile Dental…</div>
+      </div>
+    </div>
+
+    <div class="screen s3" id="s3">
+      <div class="sms-topbar">
+        <div class="sms-avatar">BS</div>
+        <div><div class="sms-name">Bright Smile Dental</div><div class="sms-sub" id="smsSub">Text message</div></div>
+      </div>
+      <div class="sms-messages" id="msgs"></div>
+      <div class="captured-banner" id="banner">
+        <div class="bt">✓ Lead captured → handed to front desk</div>
+        <div id="capRows"></div>
+      </div>
+      <div class="sms-input" id="smsInput">
+        <input id="patientBox" type="text" placeholder="Text back as the patient…" maxlength="240" autocomplete="off">
+        <button id="sendBtn" title="Send">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl-row">
+    <button class="ctrl-btn" id="btnReplay" onclick="playScripted()">▶ Replay demo</button>
+    <button class="ctrl-btn primary" id="btnLive" onclick="startLive()">💬 Try it live — you're the patient</button>
+  </div>
+  <div class="mode-hint" id="hint"></div>
+</div>
+
+<p class="foot">Like what you see? <a href="index.html">See pricing &amp; book a 10-min demo →</a></p>
+
+<script>
+const API_BASE = ""; // same origin when served by the RingBack server; set a URL to point elsewhere
+const $ = id => document.getElementById(id);
+let timeouts = [], playing = false, liveSession = null, sending = false;
+
+function clearTimers(){ timeouts.forEach(clearTimeout); timeouts = []; }
+function t(fn, ms){ timeouts.push(setTimeout(fn, ms)); }
+function setScreen(id){ ['s1','s2','s3'].forEach(s => $(s).classList.toggle('active', s===id)); }
+function setDot(i, state){
+  $('dot'+i).className = 'tdot ' + state;
+  $('ts'+i).classList.toggle('done', state==='done');
+}
+function resetTimeline(){ [0,1,2,3].forEach(i => setDot(i, i===0?'active':'')); }
+
+function bubble(side, text){
+  const b = document.createElement('div');
+  b.className = `bubble ${side}`; b.textContent = text;
+  $('msgs').appendChild(b); $('msgs').scrollTop = 9e9;
+  setTimeout(() => b.classList.add('shown'), 10);
+  return b;
+}
+function showTyping(){
+  const td = document.createElement('div');
+  td.className = 'typing'; td.id = 'typing-ind';
+  td.innerHTML = '<div class="tdotd"></div><div class="tdotd"></div><div class="tdotd"></div>';
+  $('msgs').appendChild(td); $('msgs').scrollTop = 9e9;
+  setTimeout(() => td.classList.add('shown'), 10);
+}
+function hideTyping(){ const td = $('typing-ind'); if(td) td.remove(); }
+
+function showLead(lead){
+  const rows = [
+    ['Name', lead.name],
+    ['Patient', lead.patient_type],
+    ['Reason', lead.reason],
+    ['Times', (lead.preferred_times||[]).join(', ')],
+    ['Urgent', lead.emergency ? 'YES — call now' : 'no'],
+  ];
+  $('capRows').innerHTML = rows.map(r => `<div class="cap-row"><b>${r[0]}</b><span>${r[1]||''}</span></div>`).join('');
+  $('banner').classList.add('shown');
+  setDot(2,'done'); setDot(3,'done'); $('msgs').scrollTop = 9e9;
+}
+
+function fullReset(){
+  clearTimers(); playing = false; liveSession = null; sending = false;
+  $('msgs').innerHTML = ''; $('banner').classList.remove('shown'); $('capRows').innerHTML = '';
+  $('smsInput').classList.remove('on'); $('smsSub').textContent = 'Text message';
+  $('btnReplay').disabled = false; $('btnLive').disabled = false;
+  $('hint').textContent = '';
+  setScreen('s1'); resetTimeline();
+}
+
+/* ── Scripted auto-play (no backend needed) ─────────────────────────────── */
+const script = [
+  {side:'them', text:"Hi! This is Bright Smile Dental — so sorry we missed your call. Who do I have the pleasure of texting with?"},
+  {side:'us',   text:"Hey, this is Sarah. I've had bad tooth pain since yesterday"},
+  {side:'them', text:"Oh no, sorry Sarah! Is it severe or more of a dull ache — any swelling?"},
+  {side:'us',   text:"Pretty bad but no swelling. New patient by the way"},
+  {side:'them', text:"Got it. What days/times work best for you? Give me 2 or 3 and I'll pass them to the team."},
+  {side:'us',   text:"Tomorrow morning or Thursday afternoon"},
+  {side:'them', text:"All set, Sarah! Someone from our team will reach out shortly to lock in a time. Feel better soon!"},
+];
+const scriptLead = {name:'Sarah', patient_type:'new', reason:'tooth pain', preferred_times:['Tomorrow morning','Thursday afternoon'], emergency:false};
+
+function playScripted(){
+  fullReset(); playing = true;
+  $('btnReplay').disabled = true; $('btnLive').disabled = true;
+  $('hint').textContent = 'Scripted preview — press “Try it live” to talk to the real AI.';
+  t(()=>{ setScreen('s2'); setDot(0,'done'); setDot(1,'active'); }, 1500);
+  t(()=>{ setDot(1,'done'); setDot(2,'active'); setScreen('s3'); }, 2900);
+  let delay = 3500;
+  script.forEach((m,i) => {
+    if(m.side==='them'){
+      t(()=>showTyping(), delay); delay += 850;
+      t(()=>{ hideTyping(); bubble('them', m.text); }, delay); delay += 550;
+    } else {
+      t(()=>bubble('us', m.text), delay); delay += 1300;
+    }
+  });
+  t(()=>{ showLead(scriptLead); $('btnReplay').disabled = false; $('btnLive').disabled = false; playing = false; }, delay + 400);
+}
+
+/* ── Live mode — real AI receptionist ───────────────────────────────────── */
+async function startLive(){
+  fullReset();
+  $('btnLive').disabled = true; $('btnReplay').disabled = true;
+  $('hint').textContent = 'Connecting you to the live AI…';
+  // run the intro beat, then connect
+  setScreen('s2'); setDot(0,'done'); setDot(1,'active');
+  await sleep(1100);
+  setDot(1,'done'); setDot(2,'active'); setScreen('s3');
+  $('smsSub').textContent = 'live · real AI';
+  try{
+    const r = await fetch(API_BASE + '/demo/start', {method:'POST'});
+    if(!r.ok) throw new Error('no backend');
+    const d = await r.json();
+    liveSession = d.session;
+    showTyping(); await sleep(700); hideTyping();
+    bubble('them', d.reply);
+    $('smsInput').classList.add('on');
+    $('hint').textContent = 'You’re the patient — reply in the phone. The AI collects your details and books you.';
+    $('patientBox').focus();
+    $('btnReplay').disabled = false;
+  }catch(e){
+    $('smsSub').textContent = 'Text message';
+    bubble('them', "The live AI needs the RingBack server running (uvicorn app:app). Showing the scripted demo instead — press “Replay demo”.");
+    $('hint').textContent = 'Live AI unavailable here — the scripted preview still shows the full flow.';
+    $('btnLive').disabled = false; $('btnReplay').disabled = false;
+  }
+}
+
+async function sendPatient(){
+  if(sending || !liveSession) return;
+  const box = $('patientBox'); const text = box.value.trim();
+  if(!text) return;
+  sending = true; $('sendBtn').disabled = true; box.value = '';
+  bubble('us', text);
+  showTyping();
+  try{
+    const r = await fetch(API_BASE + '/demo/reply', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({session: liveSession, body: text})
+    });
+    const d = await r.json();
+    await sleep(500); hideTyping();
+    bubble('them', d.reply);
+    if(d.captured && d.lead){
+      showLead(d.lead);
+      $('smsInput').classList.remove('on');
+      $('hint').textContent = 'That’s the whole flow — a clean lead handed to the front desk. 🎉';
+      liveSession = null;
+    }
+  }catch(e){
+    hideTyping();
+    bubble('them', "Hmm, lost the connection. Hit reset and try again.");
+  }
+  sending = false; $('sendBtn').disabled = false; $('patientBox').focus();
+}
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+$('sendBtn').addEventListener('click', sendPatient);
+$('patientBox').addEventListener('keydown', e => { if(e.key==='Enter') sendPatient(); });
+
+// auto-play the scripted preview on load
+setTimeout(playScripted, 700);
+</script>
+</body>
+</html>
